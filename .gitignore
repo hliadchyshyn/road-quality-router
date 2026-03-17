@@ -1,11 +1,36 @@
+# ── Dependencies ──────────────────────────────────────────────────────────────
 node_modules/
-dist/
-.env
 
-# OSM data files — large binaries, not committed
+# ── Build output ──────────────────────────────────────────────────────────────
+dist/
+packages/*/dist/
+
+# ── Environment / secrets ─────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+packages/**/.env
+packages/**/.env.local
+
+# ── OSM data — large binaries ─────────────────────────────────────────────────
 data/
 *.osm.pbf
 *.osm
 
-# Misc
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ── TypeScript build info ─────────────────────────────────────────────────────
+*.tsbuildinfo
+
+# ── Editor / OS ───────────────────────────────────────────────────────────────
 .DS_Store
+.idea/
+.vscode/settings.json
+*.swp
+*.swo
+Thumbs.db
+
+# ── Docker volumes (if mounted locally) ──────────────────────────────────────
+pgdata/
