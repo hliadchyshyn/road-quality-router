@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+
+# OSM data files — large binaries, not committed
+data/
+*.osm.pbf
+*.osm
+
+# Misc
+.DS_Store

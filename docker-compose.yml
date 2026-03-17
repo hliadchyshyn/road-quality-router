@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  db:
+    image: pgrouting/pgrouting:17-3.7.3
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rqr}
+      POSTGRES_USER: ${POSTGRES_USER:-rqr}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rqr_dev}
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/postgres/init.sql:/docker-entrypoint-initdb.d/01_init.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-rqr} -d ${POSTGRES_DB:-rqr}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./packages/api
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-rqr}:${POSTGRES_PASSWORD:-rqr_dev}@db:5432/${POSTGRES_DB:-rqr}
+      NODE_ENV: development
+      PORT: 3000
+      WAZE_FETCH_INTERVAL_MINUTES: ${WAZE_FETCH_INTERVAL_MINUTES:-5}
+      WAZE_UKRAINE_BBOX: ${WAZE_UKRAINE_BBOX:-30.2,50.2,30.8,50.7}
+    volumes:
+      - ./packages/api:/app
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    command: npm run dev
+
+volumes:
+  pgdata:

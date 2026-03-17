@@ -1,0 +1,18 @@
+{
+  "name": "road-quality-router",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev":      "npm run dev -w packages/api",
+    "build":    "npm run build -w packages/api",
+    "seed":     "npm run seed -w packages/api",
+    "dev:web":  "npm run dev -w packages/web",
+    "build:web":"npm run build -w packages/web"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
